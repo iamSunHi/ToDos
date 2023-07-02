@@ -1,0 +1,40 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes wipeRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100%) translateY(-50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0%) translateY(-50%);
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes turnaroundAndFadeOut {
+  0% {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-50%) rotate(360deg);
+    opacity: 0;
+  }
+}

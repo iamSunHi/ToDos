@@ -1,3 +1,5 @@
+import { Task } from './models/task.model';
+import { TaskService } from './services/task.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'To-do_App';
+
 }

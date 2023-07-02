@@ -1,0 +1,182 @@
+<div class="home position-relative">
+  <header class="header">
+    
+  </header>
+
+  <div class="container">
+    <header class="container__header">
+      <div class="">
+        <h1 class="container__header-currentDate">
+          {{currentDate}}
+        </h1>
+        <h6 class="container__header-isCompleted">
+          {{this.taskService.incompleteTasks.length}} incomplete, {{this.taskService.completedTasks.length}} completed
+        </h6>
+      </div>
+      <div class="container__header__search">
+        <input (keyup)="this.searchEventListener()" [(ngModel)]="this.searchValue" type="text" name="search"
+          class="container__header__search-input" placeholder="Search . . .">
+        <button class="btn container__header__search-btn">
+          <i class="fa-solid fa-magnifying-glass container__header__search-btn-icon"></i>
+        </button>
+        <div class="container__header__search-result">
+          <div *ngIf="this.searchValue">
+            <div *ngIf="!this.isFound" class="container__header__search-result--no-result">
+              <img src="../../../assets/img/no_result.jfif" alt="">
+              <h6>Sorry! No result found :(</h6>
+              <span>We're sorry we cannot find what you were looking for.</span>
+              <span>Please try again with something else!</span>
+            </div>
+            <div *ngIf="this.isFound" class="container__header__search-result--has-result">
+              <div *ngFor="let task of this.taskService.searchResult" class="container__header__search-result__item">
+                <div class="container__header__search-result__item-content">
+                  <h6>{{task.title}}</h6>
+                  <span>{{task.description}}</span>
+                </div>
+                <div class="container__header__search-result__item-status">
+                  <span *ngIf="!task.isCompleted" class="container__header__search-result__item-status--incomplete">
+                    Incomplete
+                  </span>
+                  <span *ngIf="task.isCompleted" class="container__header__search-result__item-status--completed">
+                    Completed
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container__body">
+      <div *ngIf="this.isLoading" class="loader">
+        <div class="justify-content-center jimu-primary-loading"></div>
+      </div>
+
+      <div class="row">
+        <!-- Incomplete tasks-->
+        <div class="col-6 container__body__incomplete">
+          <div class="container__body__incomplete-header">
+            <h4>Incomplete</h4>
+            <div class="d-flex align-items-center justify-content-center">
+              <div class="btn container__body__sort-by px-2 mx-3">
+                Sort by:
+                <div class="">
+                  {{this.sortBy}}
+                  <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <ul (click)="this.changeSortEventListener($event)" class="container__body__sort-by__list">
+                  <li class="container__body__sort-by__list--name active">
+                    Title
+                    <i class="fa-solid fa-check"></i>
+                  </li>
+                  <li class="container__body__sort-by__list--priority">
+                    Priority
+                    <i class="fa-solid fa-check"></i>
+                  </li>
+                </ul>
+              </div>
+              <div class="container__body__incomplete-header__add-task">
+                <button (click)="this.showAddForm()" class="btn btn-success">
+                  ADD
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="container__body__incomplete-list">
+            <div *ngFor="let task of this.taskService.incompleteTasks" id="task-{{task.id}}"
+              class="container__body__incomplete-list__item">
+              <input (change)="this.changeStatusEventListener(task.id)" [(ngModel)]="task.isCompleted" type="checkbox"
+                class="container__body--isCompleted">
+              <div class="container__body__incomplete-list__item-content">
+                <h5>{{task.title}}</h5>
+                <span>{{task.description}}</span>
+              </div>
+              <button (click)="this.showDeleteConfirmation(); this.taskService.deletingTask = task"
+                class="btn container__body__delete-btn">
+                <i class="fa-solid fa-xmark container__body__delete-btn__delete-icon"></i>
+                <div class="btn btn-danger container__body__delete-btn__delete-btn-label">
+                  Delete
+                  <i class="fa-solid fa-xmark ps-1"></i>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Completed tasks-->
+        <div class="col-6 container__body__completed">
+          <h4 class="container__body__completed-header">Completed</h4>
+          <div class="container__body__completed-list">
+            <div *ngFor="let task of this.taskService.completedTasks" id="task-{{task.id}}"
+              class="container__body__completed-list__item">
+              <input (change)="this.changeStatusEventListener(task.id)" [(ngModel)]="task.isCompleted" type="checkbox"
+                class="container__body--isCompleted">
+              <div class="container__body__completed-list__item-content">
+                <h5>{{task.title}}</h5>
+                <span>{{task.description}}</span>
+              </div>
+              <button (click)="this.showDeleteConfirmation(); this.taskService.deletingTask = task"
+                class="btn container__body__delete-btn">
+                <i class="fa-solid fa-xmark container__body__delete-btn__delete-icon"></i>
+                <div class="btn btn-danger container__body__delete-btn__delete-btn-label">
+                  Delete
+                  <i class="fa-solid fa-xmark ps-1"></i>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button (click)="this.taskService.saveTasks()" class="btn btn-outline-dark container__body__save-btn">Save</button>
+    </div>
+  </div>
+
+  <div class="add-form__container">
+    <form [formGroup]="this.addTaskForm" class="add-form">
+      <button (click)="this.closeAddForm()" class="btn btn-outline-danger add-form__close-btn">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="form-floating add-form__title">
+        <input type="text" class="form-control" id="floatingInput" placeholder="Title" formControlName="title">
+        <label for="floatingInput">Title</label>
+      </div>
+      <div class="form-floating add-form__description">
+        <textarea class="form-control" placeholder="Description" id="floatingTextarea"
+          formControlName="description"></textarea>
+        <label for="floatingTextarea">Description</label>
+      </div>
+      <div class="input-group add-form__priority mb-2">
+        <label class="input-group-text" for="add-form__priority_select-list">Priority</label>
+        <select class="form-select" id="add-form__priority_select-list" formControlName="priority">
+          <option selected value="1">Low</option>
+          <option value="2">Medium</option>
+          <option value="3">High</option>
+        </select>
+      </div>
+      <button [disabled]="!this.addTaskForm.valid"
+        (click)="this.addTask()"
+        class="btn btn-outline-success add-form__submit-btn">
+        ADD
+      </button>
+    </form>
+  </div>
+
+  <div class="deleteConfirmation">
+    <div class="deleteConfirmation__container">
+      <h5>Are you sure to delete this task?</h5>
+      <span>If you delete this task, you can't recover it.</span>
+      <div class="d-flex align-items-center justify-content-end mt-4">
+        <button (click)="this.closeDeleteConfirmation()" class="btn deleteConfirmation__container__cancel-btn">
+          Cancel
+        </button>
+        <button (click)="this.taskService.removeTask(); this.closeDeleteConfirmation()"
+          class="btn deleteConfirmation__container__delete-btn">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
