@@ -156,24 +156,27 @@ export class TaskService {
 
   /* ---------------------- HTTP METHODS ---------------------- */
   getTasks(): Observable<Array<Task>> {
-    const dataUrl = this.baseUrl + 'tasks';
+    // const dataUrl = this.baseUrl + 'tasks';
+    const dataUrl = 'https://raw.githubusercontent.com/SunHiIsDev/ToDos/main/db.json';
     return this._httpClient.get<Array<Task>>(dataUrl);
   }
   postTask(task: Task): Observable<Task> {
-    const dataUrl = this.baseUrl + 'tasks';
-
+    // const dataUrl = this.baseUrl + 'tasks';
+    const dataUrl = 'https://raw.githubusercontent.com/SunHiIsDev/ToDos/main/db.json';
     // const headers = { 'content-type': 'application/json'}
     // const jsonData = JSON.stringify(task);
     return this._httpClient.post<Task>(dataUrl, task);
   }
   putTask(task: Task): Observable<Task> {
-    const dataUrl = this.baseUrl + 'tasks/' + task.id;
+    // const dataUrl = this.baseUrl + 'tasks/' + task.id;
+    const dataUrl = 'https://raw.githubusercontent.com/SunHiIsDev/ToDos/main/db.json';
     // const headers = { 'content-type': 'application/json'}
     // const jsonData = JSON.stringify(task);
     return this._httpClient.put<Task>(dataUrl, task);
   }
   deleteTask(task: Task): Observable<Task> {
-    const dataUrl = this.baseUrl + 'tasks/' + task.id;
+    // const dataUrl = this.baseUrl + 'tasks/' + task.id;
+    const dataUrl = 'https://raw.githubusercontent.com/SunHiIsDev/ToDos/main/db.json';
     // const headers = { 'content-type': 'application/json'}
     // const jsonData = JSON.stringify(task);
     return this._httpClient.delete<Task>(dataUrl);
